@@ -1,17 +1,20 @@
-﻿
-
-// Рекурсия вниз (с телом-выражением)
-let rec sumOfDigitsDown n =
-    match n with
-    | 0 -> 0 // Базовый случай
-    | _ -> sumOfDigitsDown (n / 10) + (n % 10) // Рекурсивный случай
-
+﻿let digitSum2 n = 
+    let rec sumCifr1 n curSum = 
+        if n = 0 then curSum
+        else
+            let n1 = n/10
+            let cifr = n%10
+            let newSum = curSum + cifr
+            sumCifr1 n1 newSum
+    sumCifr1 n 0
 
 let main () =
-    printfn "Введите число:"
-    let number = System.Console.ReadLine() |> int 
 
-    let sum = sumOfDigitsDown number 
-    printfn "Сумма цифр числа %d равна %d" number sum 
+    let sum2 = digitSum2 324
+    System.Console.Write "сумма цифр числа 324: "
+    System.Console.Write sum2
+
+    System.Console.ReadKey()
+
 
 main()
