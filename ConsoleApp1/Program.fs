@@ -23,3 +23,16 @@ let countEvenNonCoprimes n =
                 | false -> count
             loop (current / 10) newCount
     loop n 0
+
+let maxDigitNotDivBy3 n =
+    let rec loop current max =
+        match current with
+        | 0 -> max
+        | _ ->
+            let digit = current % 10
+            let newMax =
+                match digit % 3 <> 0 with
+                | true -> if digit > max then digit else max
+                | false -> max
+            loop (current / 10) newMax
+    loop n -1
