@@ -41,7 +41,6 @@ let maxDigitNotDivBy3 n =
 let complexProduct n =
     let minDiv = smallestDivisor n
     
-    // Часть 1: Максимальное число, не взаимно простое и не делящееся на minDiv
     let maxNonCoprime =
         let rec loop current max =
             match current with
@@ -55,7 +54,6 @@ let complexProduct n =
                 loop (current / 10) newMax
         loop n -1
     
-    // Часть 2: Сумма цифр < 5
     let sumDigitsLess5 =
         let rec loop current sum =
             match current with
@@ -69,13 +67,55 @@ let complexProduct n =
                 loop (current / 10) newSum
         loop n 0
     
-    // Результат
+    
     maxNonCoprime * sumDigitsLess5
 
-let testMethods () =
-    let num = 36
-    printfn "Метод 1 для %d: %d" num (countEvenNonCoprimes num)
-    printfn "Метод 2 для %d: %d" num (maxDigitNotDivBy3 num)
-    printfn "Метод 3 для %d: %d" num (complexProduct num)
+let getFunction = function
+    | 1 -> countEvenNonCoprimes
+    | 2 -> maxDigitNotDivBy3
+    | 3 -> complexProduct
+    | _ -> failwith "Неверный номер функции"
 
-testMethods()
+let mainWithCurrying () =
+    let processInput (fnNumber, arg) = 
+        getFunction fnNumber arg
+    let printResult result = printfn "Результат: %d" result
+    
+    printfn "Введите кортеж (номер функции, аргумент):"
+    let input = System.Console.ReadLine()
+    let parsed = 
+        try 
+            input.Trim('(', ')').Split(',') 
+            |> Array.map int 
+            |> fun arr -> (arr.[0], arr.[1]) 
+            |> Some
+        with _ -> None
+    
+    match parsed with
+    | Some (num, arg) -> processInput (num, arg) |> printResult
+    | None -> printfn "Ошибка ввода"
+
+mainWithCurrying()
+
+// Main с суперпозицией
+let mainWithComposition () =
+    let parseInput = 
+        fun s -> 
+            s.Trim('(', ')').Split(',') 
+            |> Array.map int 
+            |> fun arr -> (arr.[0], arr.[1])
+    
+    let processInput = 
+        parseInput 
+        >> (fun (num, arg) -> getFunction num arg)
+    
+    let printResult = 
+        printfn "Результат: %d"
+    
+    printfn "Введите кортеж (номер функции, аргумент):"
+    System.Console.ReadLine() 
+    |> processInput 
+    |> printResult
+
+// Вызов
+mainWithComposition()
