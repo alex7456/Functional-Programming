@@ -36,3 +36,46 @@ let maxDigitNotDivBy3 n =
                 | false -> max
             loop (current / 10) newMax
     loop n -1
+
+
+let complexProduct n =
+    let minDiv = smallestDivisor n
+    
+    // Часть 1: Максимальное число, не взаимно простое и не делящееся на minDiv
+    let maxNonCoprime =
+        let rec loop current max =
+            match current with
+            | 0 -> max
+            | _ ->
+                let digit = current % 10
+                let newMax =
+                    match gcd digit n <> 1 && digit % minDiv <> 0 with
+                    | true -> if digit > max then digit else max
+                    | false -> max
+                loop (current / 10) newMax
+        loop n -1
+    
+    // Часть 2: Сумма цифр < 5
+    let sumDigitsLess5 =
+        let rec loop current sum =
+            match current with
+            | 0 -> sum
+            | _ ->
+                let digit = current % 10
+                let newSum =
+                    match digit < 5 with
+                    | true -> sum + digit
+                    | false -> sum
+                loop (current / 10) newSum
+        loop n 0
+    
+    // Результат
+    maxNonCoprime * sumDigitsLess5
+
+let testMethods () =
+    let num = 36
+    printfn "Метод 1 для %d: %d" num (countEvenNonCoprimes num)
+    printfn "Метод 2 для %d: %d" num (maxDigitNotDivBy3 num)
+    printfn "Метод 3 для %d: %d" num (complexProduct num)
+
+testMethods()
