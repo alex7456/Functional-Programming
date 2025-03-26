@@ -6,5 +6,18 @@
     | "C++" -> "Сложно, но интересно!"
     | _ -> "Хороший вкус!"
 
-// Пример вызова:
-printfn "%s" (reactToLanguage "F#")  // Выведет: "Ты — подлиза!"
+
+
+let mainSuperposition () =
+    let readInput () = System.Console.ReadLine()
+    let processInput = readInput >> reactToLanguage
+    printfn "Введите ваш любимый язык:"
+    processInput () |> printfn "%s"
+
+let mainCurrying () =
+    let readAndReact reactFunc =
+        printfn "Введите ваш любимый язык:"
+        System.Console.ReadLine() |> reactFunc |> printfn "%s"
+    readAndReact reactToLanguage
+
+mainSuperposition()  
