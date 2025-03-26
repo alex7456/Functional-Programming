@@ -1,20 +1,25 @@
-﻿let digitSum2 n = 
-    let rec sumCifr1 n curSum = 
-        if n = 0 then curSum
-        else
-            let n1 = n/10
-            let cifr = n%10
-            let newSum = curSum + cifr
-            sumCifr1 n1 newSum
-    sumCifr1 n 0
+﻿let getFunction (isSumDigits: bool) =
+    if isSumDigits then
+        
+        let sumDigits n =
+            let rec loop acc num =
+                match num with
+                | 0 -> acc
+                | _ -> loop (acc + num % 10) (num / 10)
+            loop 0 n
+        sumDigits
+    else
+        let rec fibonacci n =
+            match n with
+            | 0 -> 0
+            | 1 -> 1
+            | _ -> fibonacci(n-1) + fibonacci(n-2)
+        fibonacci
 
-let main () =
 
-    let sum2 = digitSum2 324
-    System.Console.Write "сумма цифр числа 324: "
-    System.Console.Write sum2
-
-    System.Console.ReadKey()
-
-
-main()
+let sumdigitsfunc = getFunction true
+let sumres = sumdigitsfunc 123
+printfn "%d" sumres
+let fibonaccifunc = getFunction false 
+let fibres = fibonaccifunc 10
+printfn "%d" fibres
