@@ -1,28 +1,27 @@
-﻿let digitTraversal number operation initial =
+﻿let conditionalDigitTraversal number operation initial condition =
     let rec loop n acc =
         match n with
         | 0 -> acc
         | _ ->
             let digit = n % 10
-            loop (n / 10) (operation acc digit)
+            let newAcc = 
+                match condition digit with
+                | true -> operation acc digit
+                | false -> acc
+            loop (n / 10) newAcc
     loop number initial
 
-let testDigitTraversal () =
-    let number = 12345
+let testConditionalDigitTraversal () =
+    let number = 123456789
     
-    let sum = digitTraversal number (+) 0
-    printfn "Сумма цифр числа %d: %d" number sum
+    let sumEven = conditionalDigitTraversal number (+) 0 (fun x -> x % 2 = 0)
+    printfn "Сумма четных цифр числа %d: %d" number sumEven
     
-    let product = digitTraversal number (*) 1
-    printfn "Произведение цифр числа %d: %d" number product
+    let productGreaterThan5 = conditionalDigitTraversal number (*) 1 (fun x -> x > 5)
+    printfn "Произведение цифр числа %d больше 5: %d" number productGreaterThan5
     
-    let minDigit = digitTraversal number (fun acc x -> min acc x) System.Int32.MaxValue
-    printfn "Минимальная цифра числа %d: %d" number minDigit
-    
-    let maxDigit = digitTraversal number (fun acc x -> max acc x) System.Int32.MinValue
-    printfn "Максимальная цифра числа %d: %d" number maxDigit
+    let maxOdd = conditionalDigitTraversal number max System.Int32.MinValue (fun x -> x % 2 <> 0)
+    printfn "Максимальная нечетная цифра числа %d: %d" number maxOdd
 
-// Явный вызов тестовой функции
-testDigitTraversal()
-// Добавьте эту строку, чтобы консоль не закрывалась сразу
-System.Console.ReadKey() |> ignore
+
+testConditionalDigitTraversal()
