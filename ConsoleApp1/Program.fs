@@ -1,26 +1,25 @@
 ﻿let rec gcd a b = 
-    match b with
-    | 0 -> a
+    match b with 
+    | 0 -> a 
     | _ -> gcd b (a % b)
 
-let traverseCoprimesWithCond number operation initial cond =
-    let rec loop current acc =
-        match current <= 1 with
-        | true -> acc
-        | false ->
-            let isCoprime = gcd current number = 1
-            let meetsCond = cond current
-            let newAcc = 
-                match isCoprime && meetsCond with
-                | true -> operation acc current
-                | false -> acc
-            loop (current - 1) newAcc
-    loop number initial
+let smallestDivisor n =
+    let rec loop i =
+        match i with
+        | _ when i * i > n -> n
+        | _ when n % i = 0 -> i
+        | _ -> loop (i + 1)
+    loop 2
 
-let sumEvenCoprimes n =
-    traverseCoprimesWithCond n (+) 0 (fun x -> x % 2 = 0)
-
-let testCondCoprimes () =
-    printfn "Сумма чётных взаимно простых с 10: %d" (sumEvenCoprimes 10)
-
-testCondCoprimes()
+let countEvenNonCoprimes n =
+    let rec loop current count =
+        match current with
+        | 0 -> count
+        | _ ->
+            let digit = current % 10
+            let newCount =
+                match digit % 2 = 0 && gcd digit n <> 1 with
+                | true -> count + 1
+                | false -> count
+            loop (current / 10) newCount
+    loop n 0
