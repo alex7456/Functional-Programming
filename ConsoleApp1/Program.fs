@@ -84,11 +84,17 @@ let find_most_frequent_list_based list =
     list
     |> List.countBy id         
     |> List.maxBy snd          
-    |> fst                     
+    |> fst                
+    
+let count_squares list =
+    list
+    |> List.filter (fun x -> List.exists (fun y -> y * y = x) list)
+    |> List.length
+
 
 
 let main =
-    let test = [5; 3; 8; 1; 4; 6; 5; 3; 5]
+    let test = [5; 3; 8; 1; 4; 6; 5; 3; 5;2]
 
     Console.Write("Минимум в списке: ")
     Console.WriteLine(min_list test)
@@ -108,6 +114,8 @@ let main =
     Console.Write("Самый частый элемент (List): ")
     Console.WriteLine(find_most_frequent_list_based test)
 
+    Console.Write("Количество квадратов в списке: ")
+    Console.WriteLine(count_squares test)
 
 
 main
