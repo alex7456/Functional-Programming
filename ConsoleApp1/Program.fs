@@ -184,6 +184,62 @@ let solve_1_54_list (lst: int list) : int list =
     |> List.filter (fun (_, count) -> count > 3)
     |> List.map fst
 
+
+let find_pythagorean_triples (lst: int list) : (int * int * int) list =
+    lst
+    |> List.distinct
+    |> List.sort
+    |> fun sorted ->
+        [ for a in sorted do
+            for b in sorted do
+                for c in sorted do
+                    if a < b && b < c && a * a + b * b = c * c then
+                        yield (a, b, c) ]
+
+
+let filter_divisible_by_3 (arr: int[]) : int[] =
+    arr |> Array.filter (fun x -> x % 3 = 0)
+
+
+let is_palindrome (s: string) : bool =
+    let clean = s.ToLower().Replace(" ", "")
+    clean = new string(List.rev (Seq.toList clean) |> List.toArray)
+    
+let countCharFrequency (s: string) : Map<char, int> =
+    s.ToCharArray()
+    |> Array.countBy id
+    |> Map.ofArray
+
+let getCharRelativeFrequency (freqMap: Map<char, int>) (total: int) (ch: char) : float =
+    match Map.tryFind ch freqMap with
+    | Some count -> float count / float total
+    | None -> 0.0
+
+let quadraticDeviation (str: string) (totalFreq: Map<char, float>) : float =
+    let charCounts = countCharFrequency str
+    let mostFreqChar, _ =
+        charCounts
+        |> Map.toList
+        |> List.maxBy snd
+
+    let strLen = str.Length
+    let localFreq = getCharRelativeFrequency charCounts strLen mostFreqChar
+    let globalFreq = Map.tryFind mostFreqChar totalFreq |> Option.defaultValue 0.0
+    let deviation = localFreq - globalFreq
+    deviation * deviation
+
+let getGlobalFrequencies (lines: string list) : Map<char, float> =
+    let all = String.Concat(lines)
+    let len = all.Length
+    countCharFrequency all
+    |> Map.map (fun _ count -> float count / float len)
+
+let sortByQuadraticDeviation (lines: string list) : string list =
+    let globalFreqs = getGlobalFrequencies lines
+    lines
+    |> List.sortBy (fun s -> quadraticDeviation s globalFreqs)
+
+
 let main =
     let test = [5; 3; 8; 1; 4; 6; 5; 3; 5;2]
 
@@ -235,5 +291,29 @@ let main =
     printfn "1.44: %b" (solve_1_44_list [box 1; box 1.2; box 3; box 4.0])
     printfn "1.54: %A" (solve_1_54_list [1;1;1;1;2;2;2;3;3;3;3;3])
 
+    let triples = find_pythagorean_triples test
+    printfn "\nПифагоровы тройки:"
+    match triples with
+    | [] -> printfn "Не найдено."
+    | _ -> triples |> List.iter (fun (a, b, c) -> printfn "(%d, %d, %d)" a b c)
+
+
+
+    let A = [|1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12|]
+    let result = filter_divisible_by_3 A
+    printfn "Элементы, делящиеся на 3: %A" result
+
+
+    Console.Write("\nВведите строку для проверки на палиндром: ")
+    let inputStr = Console.ReadLine()
+    if is_palindrome inputStr then
+    Console.WriteLine("Это палиндром.")
+    else
+    Console.WriteLine("Это не палиндром.")
+
+    let lines = ["apple"; "banana"; "grape"; "avocado"]
+    let sorted = sortByQuadraticDeviation lines
+    printfn "Отсортированные строки:"
+    sorted |> List.iter (printfn "%s")
 
 main
