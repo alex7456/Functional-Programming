@@ -132,6 +132,57 @@ let readStringList n =
     read [] n
 
 
+let solve_1_4_list lst =
+    lst
+    |> List.mapi (fun i v -> (i, v))           
+    |> List.sortByDescending snd               
+    |> List.map fst                            
+
+let solve_1_14_list (a: int) (b: int) (lst: int list) : int =
+    lst
+    |> List.filter (fun x -> x >= a && x <= b)
+    |> List.length
+
+
+let solve_1_24_list (lst: int list) : (int * int) =
+    let sorted = lst |> List.sortDescending
+    match sorted with
+    | x :: y :: _ -> (x, y)
+    | _ -> failwith "Недостаточно элементов"
+
+
+let solve_1_34_list (a: int) (b: int) (lst: int list) : int list =
+    lst |> List.filter (fun x -> x >= a && x <= b)
+
+
+let solve_1_44_list (lst: obj list) : bool =
+    let isInt (x: obj) = x :? int
+    let isFloat (x: obj) = x :? float
+    let rec check prevType rest =
+        match rest with
+        | [] -> true
+        | head :: tail ->
+            let currType =
+                if isInt head then "int"
+                elif isFloat head then "float"
+                else "other"
+            if currType = "other" || currType = prevType then false
+            else check currType tail
+    match lst with
+    | [] -> true
+    | x :: xs ->
+        let firstType =
+            if isInt x then "int"
+            elif isFloat x then "float"
+            else "other"
+        check firstType xs
+
+
+let solve_1_54_list (lst: int list) : int list =
+    lst
+    |> List.countBy id                  
+    |> List.filter (fun (_, count) -> count > 3)
+    |> List.map fst
 
 let main =
     let test = [5; 3; 8; 1; 4; 6; 5; 3; 5;2]
@@ -175,5 +226,14 @@ let main =
 
     Console.WriteLine("\nОтсортированные строки по длине:")
     sorted |> List.iter (printfn "%s")
+
+
+    printfn "1.4: %A" (solve_1_4_list [3; 1; 4; 2])
+    printfn "1.14: %d" (solve_1_14_list 2 5 [1; 2; 3; 6])
+    printfn "1.24: %A" (solve_1_24_list [10; 5; 8; 1])
+    printfn "1.34: %A" (solve_1_34_list 2 6 [1; 3; 5; 7])
+    printfn "1.44: %b" (solve_1_44_list [box 1; box 1.2; box 3; box 4.0])
+    printfn "1.54: %A" (solve_1_54_list [1;1;1;1;2;2;2;3;3;3;3;3])
+
 
 main
