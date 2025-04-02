@@ -118,6 +118,20 @@ let make_triples a b c =
     List.zip3 sortedA sortedB sortedC
 
 
+let sort_strings_by_length (lst: string list) : string list =
+    lst |> List.sortBy String.length
+
+
+let readStringList n =
+    let rec read acc n =
+        match n with
+        | 0 -> acc
+        | _ ->
+            let line = System.Console.ReadLine()
+            read (acc @ [line]) (n - 1)
+    read [] n
+
+
 
 let main =
     let test = [5; 3; 8; 1; 4; 6; 5; 3; 5;2]
@@ -151,5 +165,15 @@ let main =
 
     printfn "Результат:"
     result |> List.iter (fun (x, y, z) -> printfn "(%d, %d, %d)" x y z)
+
+    Console.Write("Введите количество строк: ")
+    let n = Console.ReadLine() |> int
+    Console.WriteLine("Введите строки:")
+    let stringList = readStringList n
+
+    let sorted = sort_strings_by_length stringList
+
+    Console.WriteLine("\nОтсортированные строки по длине:")
+    sorted |> List.iter (printfn "%s")
 
 main
