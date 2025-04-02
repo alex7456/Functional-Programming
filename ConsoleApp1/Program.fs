@@ -80,6 +80,12 @@ let testTree =
     |> fun t -> insert t "peach"
     |> fun t -> insert t "banana"
 
+let find_most_frequent_list_based list =
+    list
+    |> List.countBy id         
+    |> List.maxBy snd          
+    |> fst                     
+
 
 let main =
     let test = [5; 3; 8; 1; 4; 6; 5; 3; 5]
@@ -98,5 +104,10 @@ let main =
 
     Console.WriteLine("\nСодержимое строки в двоичном дереве (in-order):")
     inOrder testTree |> List.iter (printfn "%s")
+
+    Console.Write("Самый частый элемент (List): ")
+    Console.WriteLine(find_most_frequent_list_based test)
+
+
 
 main
