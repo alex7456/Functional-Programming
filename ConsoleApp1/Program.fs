@@ -1,5 +1,6 @@
-﻿open System
-
+﻿
+open System
+(*
 [<AbstractClass>]
 type GeometricFigure() =
     abstract member CalculateArea: unit -> float
@@ -85,3 +86,65 @@ let fig3 = Circle(3.0)
 printfn "Площадь прямоугольника: %.2f" (calculateArea fig1)
 printfn "Площадь квадрата: %.2f" (calculateArea fig2)
 printfn "Площадь круга: %.2f" (calculateArea fig3)
+*)
+
+open System
+
+// Определяем тип Maybe, который может быть Just или Nothing
+type Maybe<'a> =
+    | Just of 'a
+    | Nothing
+
+// Реализация модуля для функтора
+module Functor =
+    let map f maybe =
+        match maybe with
+        | Just x -> Just (f x)
+        | Nothing -> Nothing
+
+// Реализация модуля для аппликативного функтора
+module Applicative =
+    let pure x = Just x
+
+    let apply f maybe =
+        match f, maybe with
+        | Just f', Just x -> Just (f' x)
+        | _ -> Nothing
+
+// Реализация модуля для монады
+module Monad =
+    let bind maybe f =
+        match maybe with
+        | Just x -> f x
+        | Nothing -> Nothing
+
+    let returnMaybe x = Just x
+
+// Определение функций для тестирования
+let increment x = x + 1
+let double x = x * 2
+
+// Реализация ToString для типа Maybe
+let maybeToString (maybe: Maybe<'a>) =
+    match maybe with
+    | Just x -> sprintf "Just %A" x
+    | Nothing -> "Nothing"
+
+// Применение операцій для тестирования
+let resultFunctor = Functor.map increment (Just 5)
+let resultNothingFunctor = Functor.map increment Nothing
+
+let resultApplicative = Applicative.apply (Just increment) (Just 5)
+let resultNothingApplicative = Applicative.apply (Just increment) Nothing
+
+let resultMonad = Monad.bind (Just 5) (fun x -> Just (x * 2))
+let resultNothingMonad = Monad.bind Nothing (fun x -> Just (x * 2))
+
+// Вывод результатов с помощью функции maybeToString
+Console.WriteLine("Результат функтора: " + maybeToString resultFunctor)
+Console.WriteLine("Результат функтора для Nothing: " + maybeToString resultNothingFunctor)
+Console.WriteLine("Результат аппликативного функтора: " + maybeToString resultApplicative)
+Console.WriteLine("Результат аппликативного функтора для Nothing: " + maybeToString resultNothingApplicative)
+Console.WriteLine("Результат монады: " + maybeToString resultMonad)
+Console.WriteLine("Результат монады для Nothing: " + maybeToString resultNothingMonad)
+ 
