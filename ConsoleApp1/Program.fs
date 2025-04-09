@@ -1,10 +1,12 @@
 ﻿open System
 
+// Определяем типы сообщений
 type Message =
-    | PrintMessage of string    
-    | DoubleNumber of int       
-    | Stop                      
+    | PrintMessage of string
+    | DoubleNumber of int
+    | Stop
 
+// Создаем агента
 let agent = MailboxProcessor.Start(fun inbox ->
     let rec loop () =
         async {
@@ -16,16 +18,17 @@ let agent = MailboxProcessor.Start(fun inbox ->
             | DoubleNumber num ->
                 printfn "Число удвоено: %d" (num * 2)
             | Stop ->
-               
                 printfn "Агент завершает работу."
-                return ()  
-            return! loop () 
+                return ()  // Завершаем выполнение
+            return! loop ()  // Возвращаем к рекурсии для ожидания сообщений
         }
-    loop ()
+    loop ())  // Начинаем цикл обработки сообщений
 
-agent.Post(PrintMessage "Hello, world!")  
-agent.Post(DoubleNumber 5)                 
-agent.Post(DoubleNumber 10)               
-agent.Post(Stop)                          
+// Отправка сообщений в агент
+agent.Post(PrintMessage "Hello, world!")  // Сообщение для печати
+agent.Post(DoubleNumber 5)                // Сообщение для удвоения числа
+agent.Post(DoubleNumber 10)               // Сообщение для удвоения числа
+agent.Post(Stop)                          // Сообщение для завершения работы агента
 
+// Ожидаем ввода, чтобы не закрыть консоль сразу
 Console.ReadLine() 
