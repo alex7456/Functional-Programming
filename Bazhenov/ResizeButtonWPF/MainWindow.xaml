@@ -1,0 +1,9 @@
+<Window x:Class="WpfFSharpApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Слайдер и кнопка" Height="200" Width="400">
+    <StackPanel Margin="20">
+        <Button Name="MyButton" Content="Нажми меня" Width="100" Height="30" Margin="0,0,0,20"/>
+        <Slider Name="MySlider" Minimum="50" Maximum="300" Value="100" TickFrequency="10" TickPlacement="BottomRight"/>
+    </StackPanel>
+</Window>

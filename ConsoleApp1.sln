@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.fsproj", "{ACE65EEE-D618-4492-9D23-AB5DE28945F5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Passport", "Passport\Passport.fsproj", "{E3A6CF0B-194B-4CB5-80F2-53BC0FA92631}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Passport", "Passport\Passport.fsproj", "{E3A6CF0B-194B-4CB5-80F2-53BC0FA92631}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
